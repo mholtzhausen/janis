@@ -1,7 +1,8 @@
 <template>
 	<div class="container-fluid">
-		<ux-state name='is_configured' value='no'></ux-state>
-		<ux-state name='is_configured' value='yes'></ux-state>
+		<ux-state name='appState' value='initializing'>initializing</ux-state>
+		<ux-state name='appState' value='requiresConfig'>requiresConfig</ux-state>
+		<ux-state name='appState' value='ready'>ready</ux-state>
 	</div>
 </template>
 
