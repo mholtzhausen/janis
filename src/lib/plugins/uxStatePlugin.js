@@ -1,6 +1,9 @@
+/**
+ * Example Configuration for a state object
+ */
 const exampleStateConfig = {
 	login: {
-		value: 'captureEmail',
+		value: '',
 		default: 'captureEmail',
 		states: [
 			'captureEmail',
@@ -34,6 +37,16 @@ const exampleStateConfig = {
 				return true
 			}
 		},
+		on: {
+			'true': (context) => {
+				return true
+			}
+		},
+		off: {
+			'true': (context) => {
+				return true
+			}
+		}
 	}
 }
 
@@ -52,6 +65,13 @@ const uxStatePlugin = {
 
 		let state = options.state
 		const debug = options.debug ? console.log.bind(console) : () => { }
+		const init = () => {
+			for (let stateName in options.state) {
+				let state = options.state[stateName]
+				state.value = undefined
+				$.set(stateName, state.default || '')
+			}
+		}
 
 		const $ = {}
 		const service = new Proxy(Vue.observable(state), {
@@ -89,7 +109,27 @@ const uxStatePlugin = {
 				}
 			}
 
+			if ('off' in target) {
+				if (
+					typeof target.on === 'object'
+					&& oldValue in target.on
+					&& typeof target.off[oldValue] === 'function'
+				) {
+					target.off[oldValue](context)
+				}
+			}
+
 			Vue.set(target, 'value', newValue)
+
+			if ('on' in target) {
+				if (
+					typeof target.on === 'object'
+					&& newValue in target.on
+					&& typeof target.on[newValue] === 'function'
+				) {
+					target.on[newValue](context)
+				}
+			}
 
 			if ('afterTransition' in target) {
 				if (
@@ -140,7 +180,7 @@ const uxStatePlugin = {
 		}
 
 
-		window[options.service] = service
+		if (options.debug) window[options.service] = service
 
 		Vue.prototype[options.service] = service
 
@@ -165,6 +205,8 @@ const uxStatePlugin = {
 				}
 			}
 		})
+
+		init() // Initialize all states
 
 	}
 }
