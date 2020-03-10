@@ -1,3 +1,4 @@
 module.exports = {
-	// login: require('./main'),
+	appState: require('./appState'),
+	editorType: require('./editorType'),
 }

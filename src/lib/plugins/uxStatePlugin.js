@@ -51,6 +51,13 @@ const exampleStateConfig = {
 }
 
 
+class uxInvalidStateError extends Error {
+	constructor(canSet) {
+		super(`Cannot set '${canSet.prop}' to '${canSet.newValue}' : ${canSet.reason}`)
+		Error.captureStackTrace(this, uxInvalidStateError)
+	}
+}
+
 const uxStatePlugin = {
 	install (Vue, options) {
 		options = Object.assign({
@@ -58,18 +65,22 @@ const uxStatePlugin = {
 			service: '$ux',
 			debug: false,
 			state: {
-
-
 			}
 		}, options || {})
 
-		let state = options.state
+
+		let state = ((states)=>{
+			for(let name in states){
+				states[name].value=undefined
+			}
+			return states
+		})(options.state)
+
+
 		const debug = options.debug ? console.log.bind(console) : () => { }
 		const init = () => {
-			for (let stateName in options.state) {
-				let state = options.state[stateName]
-				state.value = undefined
-				$.set(stateName, state.default || '')
+			for (let stateName in state) {
+				$.set(stateName, state[stateName].default || '')
 			}
 		}
 
@@ -88,56 +99,59 @@ const uxStatePlugin = {
 
 		$.set = function(prop, newValue) {
 			let canSet = this.canSet(prop, newValue)
-			if (!canSet.success) return false
+			if (!canSet.success) {
+				throw new uxInvalidStateError(canSet)
+				return false
+			}
 
-			let target = state[prop]
-			let oldValue = target.value
-			let validate = target.validate || {}
+			let self = state[prop]
+			let oldValue = self.value
+			let validate = self.validate || {}
 
 			const transitionName = `${oldValue} > ${newValue}`
-			const context = { state, options, target, oldValue, validate, prop, newValue, transitionName }
+			const context = { service, state, options, self, oldValue, validate, prop, newValue, transitionName }
 
-			if ('beforeTransition' in target) {
+			if ('beforeTransition' in self) {
 				if (
-					typeof target.beforeTransition === 'object'
-					&& transitionName in target.beforeTransition
-					&& typeof target.beforeTransition[transitionName] === 'function'
+					typeof self.beforeTransition === 'object'
+					&& transitionName in self.beforeTransition
+					&& typeof self.beforeTransition[transitionName] === 'function'
 				) {
-					if (!target.beforeTransition[transitionName](context)) {
+					if (!self.beforeTransition[transitionName](context)) {
 						return ret(false, `${transitionName} beforeTransition cancelled`)
 					}
 				}
 			}
 
-			if ('off' in target) {
+			if ('off' in self) {
 				if (
-					typeof target.on === 'object'
-					&& oldValue in target.on
-					&& typeof target.off[oldValue] === 'function'
+					typeof self.on === 'object'
+					&& oldValue in self.on
+					&& typeof self.off[oldValue] === 'function'
 				) {
-					target.off[oldValue](context)
+					self.off[oldValue](context)
 				}
 			}
 
-			Vue.set(target, 'value', newValue)
+			Vue.set(self, 'value', newValue)
 
-			if ('on' in target) {
+			if ('on' in self) {
 				if (
-					typeof target.on === 'object'
-					&& newValue in target.on
-					&& typeof target.on[newValue] === 'function'
+					typeof self.on === 'object'
+					&& newValue in self.on
+					&& typeof self.on[newValue] === 'function'
 				) {
-					target.on[newValue](context)
+					self.on[newValue](context)
 				}
 			}
 
-			if ('afterTransition' in target) {
+			if ('afterTransition' in self) {
 				if (
-					typeof target.afterTransition === 'object'
-					&& transitionName in target.afterTransition
-					&& typeof target.afterTransition[transitionName] === 'function'
+					typeof self.afterTransition === 'object'
+					&& transitionName in self.afterTransition
+					&& typeof self.afterTransition[transitionName] === 'function'
 				) {
-					target.afterTransition[transitionName](context)
+					self.afterTransition[transitionName](context)
 				}
 			}
 
@@ -151,7 +165,7 @@ const uxStatePlugin = {
 			let oldValue = target.value
 			let validate = target.validate || {}
 
-			const ret = (success, reason) => ({ success, reason })
+			const ret = (success, reason) => ({ success, reason, prop, newValue })
 
 			const isValidState = 'states' in target ? target.states.indexOf(newValue) >= 0 : true
 			if (!isValidState) return ret(false, `${newValue} not defined in target.states `)
@@ -205,9 +219,7 @@ const uxStatePlugin = {
 				}
 			}
 		})
-
 		init() // Initialize all states
-
 	}
 }
 
