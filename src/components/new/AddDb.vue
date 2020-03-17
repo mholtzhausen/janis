@@ -17,6 +17,7 @@
         <b-form-input id="dpPass" v-model="password" type="password" requiredx autocomplete="off"></b-form-input>
       </b-form-group>
       <div class="text-right">
+        <b-button variant="warning" @click="cancel">Cancel</b-button>
         <b-button variant="primary" type="submit">Add Janis Database</b-button>
       </div>
     </b-form>
@@ -24,7 +25,6 @@
 </template>
 
 <script>
-const api = require('../api/index')
 
 export default {
   name: 'AddDb',
@@ -37,11 +37,17 @@ export default {
       password: ''
     }
   },
+  pouch:{
+    databases:{}
+  },
   methods: {
     onSubmit (evt) {
       evt.preventDefault()
-      api.setDavDb(this.name,{...this.$data})
-      this.$.appState='initializing'
+      this.$pouch.post({...this.$data},{},'databases')
+      this.$.appState='ready'
+    },
+    cancel(){
+      $.appState='ready'
     }
   }
 }

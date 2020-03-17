@@ -39,22 +39,7 @@ export default {
   },
   data () {
     return {
-      content: `# Daily Routine
-
-### Monday, 2 March 2020
-
-#### Admin  
-- [ ] Document Grooming
-- [ ] Channels
-- [ ] Emails
-- [ ] Jira Tickets Grooming
-- [ ] Quick Run Through Site
-- [ ] Check Site Performance
-
-#### Task List
-
-#### Hat Day
-`
+      content: require('./defaultContent')
     }
   },
   computed: {

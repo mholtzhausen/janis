@@ -1,7 +1,7 @@
 const plugin = {
 	install (Vue) {
 		Vue.mixin({
-			mounted () {
+			mounted (e) {
 				this.disableAutoComplete();
 			},
 

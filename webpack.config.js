@@ -5,10 +5,10 @@ const { HotModuleReplacementPlugin } = require('webpack')
 
 const config = {
 	mode: 'development',
-	entry: join(__dirname, 'src/app.js'),
+	entry: join(__dirname, 'src/newApp.js'),
 	output:{
 		path: join(__dirname, 'dist'),
-		filename: 'bundle.js'
+		filename: 'bundle.js',
 	},
 	devServer:{
 		port: 8080,
@@ -18,7 +18,7 @@ const config = {
 	module:{
 		rules:[
 			{
-				test: /\.js$/,
+				test: /\.js$/i,
 				loader: 'babel-loader',
 				options: {
 					presets: ['@babel/preset-env'],
@@ -28,14 +28,28 @@ const config = {
 				}
 			},
 			{
-				test: /\.vue$/,
+				test: /\.vue$/i,
 				loader: 'vue-loader'
 			},
 			{
-				test: /\.css$/,
+				test: /\.css$/i,
 				use: [
 					'vue-style-loader',
 					'css-loader'
+				]
+			},
+			{
+				test: /\.s[ac]ss$/i,
+				use: [
+					'vue-style-loader',
+					'css-loader',
+					'sass-loader'
+				]
+			},
+			{
+				test: /\.(png|jpe?g|gif)$/i,
+				use: [
+					'file-loader',
 				]
 			}
 		]

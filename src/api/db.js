@@ -1,4 +1,5 @@
-const PouchDB = require('pouchdb-browser')
+import PouchDB from 'pouchdb-browser'
 const db = new PouchDB('janis_db')
+if(window) window.db = db
 
-module.exports = db
+export default db

@@ -1,0 +1,47 @@
+// Bootstrap and its default variables
+@import "./colors.scss";
+@import "node_modules/bootstrap/scss/bootstrap";
+@import url(https://fonts.googleapis.com/css?family=Comfortaa:300,400,700);
+@import url(https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css);
+
+// html, body { height: 100%; margin:0; padding:0; }
+html {
+    height: 100%;
+}
+
+
+body {
+    min-height: 100%;
+    font-family: "Comfortaa", sans-serif;
+}
+
+.btn.btn-icon {
+    height: 2.375rem;
+    min-width: 2.375rem;
+    width: 2.375rem;
+    padding: 0;
+    font-size: .9375rem;
+    overflow: hidden;
+    position: relative;
+    line-height: 2.375rem;
+}
+
+.btn-round {
+    border-width: 1px;
+    border-radius: 30px !important;
+    padding: 8px 23px;
+}
+
+.btn-small, .btn-group-small>.btn {
+    padding: 0.15rem 0.25rem;
+    font-size: 0.675rem;
+    line-height: 1.2;
+    border-radius: 0.2rem;
+}
+
+.btn-tiny, .btn-group-tiny>.btn {
+    padding: 0.15rem 0.25rem;
+    font-size: 0.675rem;
+    line-height: 1.2;
+    border-radius: 0.2rem;
+}
