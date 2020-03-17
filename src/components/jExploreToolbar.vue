@@ -43,7 +43,8 @@ export default {
       this.$.appState = 'addDatabase'
     },
     editDatabase(did){
-      console.log(this.$conf)
+      this.$shared.editDatabaseId=did
+      this.$.appState='editDatabase'
     }
   },
   computed: {

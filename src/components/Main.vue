@@ -9,7 +9,7 @@ This area over here could be used to provide commentary on the component
       <add-db></add-db>
     </ux-state>
     <ux-state name="appState" value="editDatabase" key="">
-      <add-db></add-db>
+      <add-db :edit="$shared.editDatabaseId"></add-db>
     </ux-state>
     <main-app v-if="$.appState==='ready'"></main-app>
   </div>

@@ -50,6 +50,10 @@ Vue.use(uxStatePlugin, {
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
+Vue.use({install(Vue){
+	Vue.prototype.$shared = Vue.observable({})
+}})
+
 import jIcon from './components/jIcon.vue'
 Vue.component('j-icon', jIcon)
 
