@@ -6,22 +6,22 @@ This area over here could be used to provide commentary on the component
   <div style="  min-height: 100%;display: grid;">
     <ux-state name="appState" value="initializing">initializing</ux-state>
     <ux-state name="appState" value="addDatabase">
-      <add-db></add-db>
+      <add-edit-db></add-edit-db>
     </ux-state>
     <ux-state name="appState" value="editDatabase" key="">
-      <add-db :edit="$shared.editDatabaseId"></add-db>
+      <add-edit-db :edit="$shared.editDatabaseId"></add-edit-db>
     </ux-state>
     <main-app v-if="$.appState==='ready'"></main-app>
   </div>
 </template>
 
 <script>
-import AddDb from './AddDb.vue'
+import AddEditDb from './AddEditDb.vue'
 import App from './App.vue'
 
 export default {
   components:{
-    AddDb,
+    AddEditDb,
     MainApp:App
   }
 }
