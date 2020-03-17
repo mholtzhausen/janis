@@ -1,71 +1,43 @@
+
+
+This area over here could be used to provide commentary on the component
+
 <template>
-  <b-container fluid>
+  <div style="  min-height: 100%;display: grid;">
     <ux-state name="appState" value="initializing">initializing</ux-state>
-    <ux-state name="appState" value="requiresConfig">
+    <ux-state name="appState" value="addDatabase">
       <add-db></add-db>
     </ux-state>
-    <ux-state name="appState" value="ready" style="height: 100%">
-      <top-nav></top-nav>
-      <b-container fluid>
-        <b-row>
-          <b-col cols="2">
-            <b-tree-view :data="treeData" :contextMenuItems="contextMenuItems" @contextMenuItemSelect="handleContextMenu" @nodeSelect="handleNodeSelect"></b-tree-view>
-          </b-col>
-          <b-col cols="10">
-            <editor></editor>
-          </b-col>
-        </b-row>
-      </b-container>
+    <ux-state name="appState" value="editDatabase" key="">
+      <add-db></add-db>
     </ux-state>
-  </b-container>
+    <main-app v-if="$.appState==='ready'"></main-app>
+  </div>
 </template>
 
 <script>
-import TopNav from './navigation/TopNav.vue'
 import AddDb from './AddDb.vue'
-import Editor from './editor/Editor.vue'
-import { bTreeView } from 'bootstrap-vue-treeview'
+import App from './App.vue'
+
 export default {
-  name: 'Main',
-  components: {
-    TopNav,
+  components:{
     AddDb,
-    Editor,
-    bTreeView
-  },
-  methods:{
-    handleContextMenu({code},{data}){
-      console.log({code,data})
-    },
-
-    handleNodeSelect(node,selected){
-      console.log(node)
-      if(selected) node.toggle()
-    }
-
-  },
-  data () {
-    return {
-      contextMenuItems: [
-        { code: 'subfolder', label: 'New Subfolder' },
-        { code: 'note', label: 'New Note' }
-      ],
-      treeData: [
-        {
-          "id": 2,
-          "more": 'stuff',
-          "name": "Venus",
-          "children": [
-            { "id": 3, "name": "Neptune" },
-            { "id": 4, "name": "Stratus" }
-          ]
-        }
-      ]
-    }
+    MainApp:App
   }
 }
 </script>
 
-<style>
+<style lang="sass">
+@import "../styles/theme/default/colors.scss";
+
+body{
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  height: 100%;
+}
+.container-fluid{
+}
+
 
 </style>

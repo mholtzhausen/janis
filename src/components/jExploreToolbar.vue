@@ -26,7 +26,7 @@
 </template>
 
 <script>
-// const { icon } = require('../../lib/consts/index')
+// const { icon } = require('../lib/consts/index')
 // icon.names.folder
 
 

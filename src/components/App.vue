@@ -71,7 +71,7 @@ export default {
 </script>
 
 <style lang="sass">
-@import "../../styles/theme/default/colors.scss";
+@import "../styles/theme/default/colors.scss";
 
 .logo{
   margin-top: 15px;

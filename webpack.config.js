@@ -5,7 +5,7 @@ const { HotModuleReplacementPlugin } = require('webpack')
 
 const config = {
 	mode: 'development',
-	entry: join(__dirname, 'src/newApp.js'),
+	entry: join(__dirname, 'src/app.js'),
 	output:{
 		path: join(__dirname, 'dist'),
 		filename: 'bundle.js',
